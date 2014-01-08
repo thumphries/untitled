@@ -22,6 +22,10 @@ Overall, though, should be pretty simple. Websockets and canvas are perfect for 
 
 Use `pythonz` and `virtualenv`. There are good instructions [here](https://github.com/calvintam/comp4920/blob/master/README.md). 
 
+##git practices
+
+Please work in branches. Don't commit your own code to master - tell somebody else to take a look.
+
 ##Basic milestones
 
 - Simple drawing on canvas, colour palette, undo button. (est. 2 hours)
