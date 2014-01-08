@@ -20,7 +20,7 @@ Overall, though, should be pretty simple. Websockets and canvas are perfect for 
 
 ##Setting up Python virtualenv
 
-Use `pythonz` and `virtualenv`. There are good instructions [https://github.com/calvintam/comp4920/blob/master/README.md](here). 
+Use `pythonz` and `virtualenv`. There are good instructions [here](https://github.com/calvintam/comp4920/blob/master/README.md). 
 
 ##Basic milestones
 
