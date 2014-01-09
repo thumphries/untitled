@@ -28,17 +28,16 @@ class PictNamespace(BaseNamespace):
     def log(self, message):
         self.logger.info("[{0}] {1}".format(self.socket.sessid, message))
 
-    def on_test_hook(self, posted):
-        self.log('Got some data, now what?');
-
     def on_post_drawing(self, posted):
         global artist
         if self.client_id == artist:
             self.broadcast_event_not_me('download_drawing', posted)
 
     def on_get_new_word(self, posted):
-        new_word = choose_word()
-        self.emit('new_word', {'word': new_word})
+        global artist
+        if self.client_id == artist:
+            new_word = choose_word()
+            self.emit('new_word', {'word': new_word})
 
 @app.route('/socket.io/<path:remaining>')
 def route(remaining):
