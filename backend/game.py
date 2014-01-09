@@ -22,7 +22,7 @@ words = []
 num_clients = 0
 artist = 0
 drawings = []
-players = []
+players = {}
 
 class PictNamespace(BaseNamespace, BroadcastMixin):
     last_ping = 0
@@ -86,14 +86,18 @@ class PictNamespace(BaseNamespace, BroadcastMixin):
         global artist
         global players
         self.username = posted['username']
-        players.append((self.client_id, self.username))
+        players[self.client_id] = self.username
         self.log("registered username %s" % self.username)        
 
     def on_post_chat(self, posted):
         global players
         cleaned = bleach.clean(posted['msg'])
         self.log("message: %s" % posted)
-        self.broadcast_event('chat_msg', {'sender': posted['sender'], 'msg': cleaned})
+        try:
+            nick = players[posted['sender']]
+            self.broadcast_event('chat_msg', {'sender': nick, 'msg': cleaned})
+        except KeyError:
+            self.broadcast_event('chat_msg', {'sender': posted['sender'], 'msg': cleaned})
 
 
 @app.route('/socket.io/<path:remaining>')
