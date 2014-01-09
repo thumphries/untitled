@@ -1,6 +1,7 @@
 var socket = io.connect('/game');
-tray.innerHTML = "Connected.";
 var tray = document.getElementById('debug');
+tray.innerHTML = "Connected.";
+var chatbox = document.getElementById('chat-output');
 
 /*
 socket.emit('get_new_word', {});
@@ -55,8 +56,17 @@ socket.on('deny_control', function(data) {
     tray.innerHTML = "Control request denied.";
 });
 
+socket.on('chat_msg', function(data) {
+    console.log("Received message: " + data);
+    chatbox.innerHTML = chatbox.innerHTML + "\n<" + data.sender + "> " + data.msg;
+});
+
 // Emissions
 
 function send_name (name) {
     socket.emit('register_user', { username: name });
+}
+
+function send_chat (guess) {
+    socket.emit('post_chat', { sender: player.id, msg: guess });
 }

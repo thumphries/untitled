@@ -29,7 +29,17 @@
                       style="display:inline-block;width:20em;text-align:center" id="player_name" placeholder="Enter Your Name" />
             </form>
           </div>
-          <canvas id=canvas width="1000" height="600" style="border: 2px black solid;display:none;"></canvas>
+          <canvas id=canvas width="800" height="600" style="border: 2px black solid;display:none;"></canvas>
+          <div id="chat">
+              <div id="chat-output">a</div>
+              <div id="chat-input">
+                <form id="chatf" onSubmit="post_chat()" action="javascript:return false;">
+                    <input type="text" class="form-control" id="chatform"
+                           style="width:20em;text-align:center" id="player_name" placeholder="Take a guess" />
+                   
+                </form>
+              </div>
+          </div>
           <div id="errata">
               <span id="debug"></span>
               <span id="countdown">　 </span>

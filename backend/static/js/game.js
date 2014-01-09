@@ -4,10 +4,7 @@ var player = {
 };
 
 var formm = document.getElementById("nf");
-formm.onsubmit(function(e) {
-    join_game();
-    return false;
-});
+var chatf = document.getElementById("chatform");
 
 function join_game () {
     var nf = document.getElementById("nameform");
@@ -41,4 +38,9 @@ function counter_tick(seconds) {
                 clearInterval(iv);
             }
     }, 1000);
+}
+
+function post_chat () {
+    var guess = chatf.value;
+    send_chat(guess);
 }

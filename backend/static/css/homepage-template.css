@@ -2,13 +2,34 @@ body {
   padding-top: 50px;
 }
 #join {
-    width: 1000px;
+    width: 800px;
     height: 600px;
     padding-top: 300px;
     border: 2px solid black;
+    float: left;
+}
+
+#canvas {
+    float: left;
 }
 
 #nameform {
-    margin-left: 350px;
+    margin-left: 250px;
     margin-right: auto;
+}
+
+#chat {
+    width: 300px;
+    float: right;
+    height: 600px;
+    border: 2px solid #DDDDDD;
+}
+
+#chat-output {
+    height: 550px;
+}
+
+#chatf {
+    top: 550px;
+    bottom: 0;
 }

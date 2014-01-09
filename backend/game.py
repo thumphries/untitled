@@ -88,6 +88,11 @@ class PictNamespace(BaseNamespace, BroadcastMixin):
         players.append((self.client_id, self.username))
         self.log("registered username %s" % self.username)        
 
+    def on_post_chat(self, posted):
+        global players
+        self.log("message: %s" % posted)
+        self.broadcast_event('chat_msg', posted)
+
 
 @app.route('/socket.io/<path:remaining>')
 def route(remaining):
