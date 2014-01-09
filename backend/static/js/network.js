@@ -1,14 +1,17 @@
+var socket = io.connect('/game');
+tray.innerHTML = "Connected.";
 var tray = document.getElementById('debug');
 
-var socket = io.connect('/game');
-
-tray.innerHTML = "Connected.";
-
+/*
 socket.emit('get_new_word', {});
 
 socket.emit('request_control', {});
 window.setInterval(function() {
     socket.emit('request_control', {});}, 10000);
+*/
+
+
+// Signals
 
 socket.on('disconnect', function () {
     console.log("Disconnected from server.");
@@ -51,3 +54,9 @@ socket.on('revoke_control', function(data) {
 socket.on('deny_control', function(data) {
     tray.innerHTML = "Control request denied.";
 });
+
+// Emissions
+
+function send_name (name) {
+    socket.emit('register_user', { username: name });
+}

@@ -23,8 +23,13 @@
 
     <body onload=init()>
         <div class="container">
-          <div id=join width="1000" height="600">TEST</div>
-          <canvas id=canvas width="1000" height="600" style="border: 2px black solid;display:hidden;"></canvas>
+          <div id="join">
+            <form onSubmit="join_game()">
+              <input type="text" class="form-control" id="nameform"
+                      style="display:inline-block;width:20em;text-align:center" id="player_name" placeholder="Enter Your Name" />
+            </form>
+          </div>
+          <canvas id=canvas width="1000" height="600" style="border: 2px black solid;display:none;"></canvas>
           <div id="errata">
               <span id="debug"></span>
               <span id="countdown">Inf.</span>

@@ -1,3 +1,14 @@
 body {
   padding-top: 50px;
 }
+#join {
+    width: 1000px;
+    height: 600px;
+    padding-top: 300px;
+    border: 1px solid black;
+}
+
+#nameform {
+    margin-left: 350px;
+    margin-right: auto;
+}
