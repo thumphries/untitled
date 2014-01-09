@@ -1,10 +1,8 @@
 var canvas;
 
-function Point(prevX, prevY, currX, currY) {
-  this.prevX = prevX;
-  this.prevY = prevY;
-  this.currX = currX;
-  this.currY = currY;
+function Point(x, y) {
+  this.x = x;
+  this.y = y;
 }
 
 function Drawing() {
@@ -15,8 +13,9 @@ Drawing.prototype.addPoint = function(point) {
   this.points.push(point);
 }
 
-//var drawings = [];
-//var currentDrawing;
+Drawing.prototype.lastPoint = function(point) {
+  return this.points[this.points.length - 1]
+}
 
 function init() {
   canvas = new Canvas();
@@ -28,44 +27,38 @@ function Canvas() {
   this.w = this.canvas.width;
   this.h = this.canvas.height;
 
-  this.p = new Point(0, 0, 0, 0);
+  this.p = new Point(0, 0);
 
   this.isMouseDown = false;
 
   this.drawings = [];
   this.currentDrawing;
 
+  var me = this;
+
   this.canvas.addEventListener("mousedown", function(e) {
-    setMouseDown(e, this);
+    setMouseDown(e, me);
   }, false);
 
   this.canvas.addEventListener("mousemove", function(e) {
-    onMouseMove(e, this);
+    onMouseMove(e, me);
   }, false);
 
   this.canvas.addEventListener("mouseup", function(e) {
-    setMouseUp(e, this);
+    setMouseUp(e, me);
   }, false);
 
   this.canvas.addEventListener("mouseout", function(e) {
-    onMouseOutBounds(e, this);
+    onMouseOutBounds(e, me);
   }, false);
 }
 
-Canvas.prototype.setPointFromPoints = function(prevX, prevY, currX, currY) {
-  this.p = new Point(prevX, prevY, currX, currY);
-}
-
-Canvas.prototype.setPointFromPoint = function(p) {
-  this.p = p;
-}
-
-function draw(p, obj) {
+function draw(p, p0, obj) {
   var colour = "black";
   var strokeWidth = 2;
   obj.ctx.beginPath();
-  obj.ctx.moveTo(p.prevX, p.prevY);
-  obj.ctx.lineTo(p.currX, p.currY);
+  obj.ctx.moveTo(p0.x, p0.y);
+  obj.ctx.lineTo(p.x, p.y);
   obj.ctx.strokeStyle = colour;
   obj.ctx.lineWidth = strokeWidth;
   obj.ctx.stroke();
@@ -74,12 +67,13 @@ function draw(p, obj) {
 
 function setMouseDown(event, obj) {
   obj.currentDrawing = new Drawing();
-  console.log(JSON.stringify(obj));
-  obj.setPointFromPoints(obj.p.currX, obj.p.currY, event.clientX - obj.canvas.offsetLeft, event.clientY - canvas.offsetTop);
+  obj.currentDrawing.addPoint(event.clientX - obj.canvas.offsetLeft, event.clientY - obj.canvas.offsetTop);
+  obj.p = new Point(event.clientX - obj.canvas.offsetLeft, event.clientY - obj.canvas.offsetTop);
+  
   obj.isMouseDown = true; 
   obj.ctx.beginPath();
   obj.ctx.fillStyle = "black";
-  obj.ctx.fillRect(obj.p.currX, obj.p.currY, 2, 2);
+  obj.ctx.fillRect(obj.p.x, obj.p.y, 2, 2);
   obj.ctx.closePath();
 }
 
@@ -96,51 +90,9 @@ function onMouseOutBounds(event, obj) {
 
 function onMouseMove(event, obj) {
   if (obj.isMouseDown) {
-    obj.setPointFromPoints(obj.currX, obj.currY, event.clientX - obj.canvas.offsetLeft, event.clientY - obj.canvas.offsetTop);
+    obj.p = new Point(event.clientX - obj.canvas.offsetLeft, event.clientY - obj.canvas.offsetTop);
+    var prevPoint = obj.currentDrawing.lastPoint();
     obj.currentDrawing.addPoint(obj.p);
-    draw(obj.p, obj);
+    draw(obj.p, prevPoint, obj);
   } 
 }
-
-/*Canvas.prototype.findxy = function(res, e) {
-  var div = document.getElementById("pos")
-  console.log(res);
-  if (res == "down") {
-    // new drawing object
-    currentDrawing = new Drawing();
-    prevX = currX;
-    prevY = currY;
-    currX = e.clientX - canvas.offsetLeft;
-    currY = e.clientY - canvas.offsetTop;
-
-    isDrawing = true;
-    dot_flag = true;
-    if (dot_flag) {
-      ctx.beginPath();
-      ctx.fillStyle = colour;
-      ctx.fillRect(currX, currY, 2, 2); 
-      ctx.closePath();
-      dot_flag = false;
-    }
-  }
-  if (res == "up" || res == "out") {
-    isDrawing = false;
-    drawings.push(currentDrawing);
-    console.log("added drawing " + JSON.stringify(currentDrawing));
-    // finalise drawing object
-  }
-  if (res == "move") {
-    if (isDrawing) {
-      prevX = currX;
-      prevY = currY;
-      currX = e.clientX - canvas.offsetLeft;
-      currY = e.clientY - canvas.offsetTop;
-      p = new Point(prevX, prevY, currX, currY);
-      console.log("added point " + JSON.stringify(p));
-      currentDrawing.addPoint(p);     
-      draw(p);
-    }
-  }
-  pos.innerHTML = "prevX: " + prevX + "<br/>prevY: " + prevY + "<br/>currX: " + currX + "<br/>currY: " + currY
-}
-*/
