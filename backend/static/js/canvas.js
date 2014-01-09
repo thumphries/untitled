@@ -1,9 +1,4 @@
-var canvas, ctx, isDrawing = false;
-var prevX, preyY, currX, currY;
-prevX = prevY = currX = currY = 0;
-var dot_flag = false;
-var colour = "black";
-var strokeWidth = 2;
+var canvas;
 
 function Point(prevX, prevY, currX, currY) {
   this.prevX = prevX;
@@ -20,40 +15,94 @@ Drawing.prototype.addPoint = function(point) {
   this.points.push(point);
 }
 
-var drawings = [];
-var currentDrawing;
+//var drawings = [];
+//var currentDrawing;
 
 function init() {
-  canvas = document.getElementById("canvas");
-  ctx = canvas.getContext("2d");
-  w = canvas.width;
-  h = canvas.height;
+  canvas = new Canvas();
+}
 
-  canvas.addEventListener("mousemove", function(e) {
-    findxy("move", e);
+function Canvas() {
+  this.canvas = document.getElementById("canvas");
+  this.ctx = this.canvas.getContext("2d");
+  this.w = this.canvas.width;
+  this.h = this.canvas.height;
+
+  this.p = new Point(0, 0, 0, 0);
+
+  this.isMouseDown = false;
+
+  this.drawings = [];
+  this.currentDrawing;
+
+  this.canvas.addEventListener("mousedown", function(e) {
+    setMouseDown(e, this);
   }, false);
-  canvas.addEventListener("mousedown", function(e) {
-    findxy("down", e);
+
+  this.canvas.addEventListener("mousemove", function(e) {
+    onMouseMove(e, this);
   }, false);
-  canvas.addEventListener("mouseup", function(e) {
-    findxy("up", e);
+
+  this.canvas.addEventListener("mouseup", function(e) {
+    setMouseUp(e, this);
   }, false);
-  canvas.addEventListener("mouseout", function(e) {
-    findxy("out", e);
+
+  this.canvas.addEventListener("mouseout", function(e) {
+    onMouseOutBounds(e, this);
   }, false);
 }
 
-function draw() {
-  ctx.beginPath();
-  ctx.moveTo(prevX, prevY);
-  ctx.lineTo(currX, currY);
-  ctx.strokeStyle = colour;
-  ctx.lineWidth = strokeWidth;
-  ctx.stroke();
-  ctx.closePath();
+Canvas.prototype.setPointFromPoints = function(prevX, prevY, currX, currY) {
+  this.p = new Point(prevX, prevY, currX, currY);
 }
 
-function findxy(res, e) {
+Canvas.prototype.setPointFromPoint = function(p) {
+  this.p = p;
+}
+
+function draw(p, obj) {
+  var colour = "black";
+  var strokeWidth = 2;
+  obj.ctx.beginPath();
+  obj.ctx.moveTo(p.prevX, p.prevY);
+  obj.ctx.lineTo(p.currX, p.currY);
+  obj.ctx.strokeStyle = colour;
+  obj.ctx.lineWidth = strokeWidth;
+  obj.ctx.stroke();
+  obj.ctx.closePath();
+}
+
+function setMouseDown(event, obj) {
+  obj.currentDrawing = new Drawing();
+  console.log(JSON.stringify(obj));
+  obj.setPointFromPoints(obj.p.currX, obj.p.currY, event.clientX - obj.canvas.offsetLeft, event.clientY - canvas.offsetTop);
+  obj.isMouseDown = true; 
+  obj.ctx.beginPath();
+  obj.ctx.fillStyle = "black";
+  obj.ctx.fillRect(obj.p.currX, obj.p.currY, 2, 2);
+  obj.ctx.closePath();
+}
+
+function setMouseUp(event, obj) {
+  if (obj.isMouseDown) {
+    obj.isMouseDown = false;
+    obj.drawings.push(obj.currentDrawing);
+  }
+}
+
+function onMouseOutBounds(event, obj) {
+  setMouseUp(event, obj);
+}
+
+function onMouseMove(event, obj) {
+  if (obj.isMouseDown) {
+    obj.setPointFromPoints(obj.currX, obj.currY, event.clientX - obj.canvas.offsetLeft, event.clientY - obj.canvas.offsetTop);
+    obj.currentDrawing.addPoint(obj.p);
+    draw(obj.p, obj);
+  } 
+}
+
+/*Canvas.prototype.findxy = function(res, e) {
   var div = document.getElementById("pos")
   console.log(res);
   if (res == "down") {
@@ -89,16 +138,9 @@ function findxy(res, e) {
       p = new Point(prevX, prevY, currX, currY);
       console.log("added point " + JSON.stringify(p));
       currentDrawing.addPoint(p);     
-      draw();
+      draw(p);
     }
   }
   pos.innerHTML = "prevX: " + prevX + "<br/>prevY: " + prevY + "<br/>currX: " + currX + "<br/>currY: " + currY
 }
-
-function replay_draw() {
-
-}
-
-function replay(drawing) {
-  
-}
+*/
