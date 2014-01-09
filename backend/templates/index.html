@@ -13,7 +13,7 @@
         <link href="/static/css/homepage-template.css" rel="stylesheet">
     </head>
 
-    <body>
+    <body onload=init()>
 
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
@@ -37,13 +37,16 @@
 
         <div class="container">
 
-            CANVAS HERE
+          <canvas id=canvas width="1000" height="500" style="border: 2px black solid;"></canvas>
+          <div id=pos></div>
+
 
         </div><!-- /.container -->
 
 
         <script src="/static/js/jquery.min.js"></script>
-        <script src="static/js/bootstrap.min.js"></script>
+        <script src="/static/js/bootstrap.min.js"></script>
+        <script src="../static/js/canvas.js"></script>
     </body>
 </html>
 
