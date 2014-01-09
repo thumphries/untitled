@@ -82,7 +82,12 @@ function setMouseUp(event, obj) {
   if (obj.isMouseDown) {
     obj.isMouseDown = false;
     obj.drawings.push(obj.currentDrawing);
+<<<<<<< HEAD
     console.log(JSON.stringify(obj.drawings));
+=======
+    socket.emit('post_drawing', { drawing: obj.currentDrawing});
+    console.log(JSON.stringify(obj.currentDrawing));
+>>>>>>> 10b3c684cc9549b62654dcb0cae8b850e98b7c34
   }
 }
 
