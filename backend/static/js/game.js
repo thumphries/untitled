@@ -3,11 +3,6 @@ var player = {
     id: 0
 };
 
-var formm = document.getElementById("nf");
-formm.onsubmit(function(e) {
-    join_game();
-    return false;
-});
 
 function join_game () {
     var nf = document.getElementById("nameform");
