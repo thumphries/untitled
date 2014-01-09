@@ -9,6 +9,7 @@ from backend import app
 import random
 import string
 import time
+import json
 
 roundlength = 10
 
@@ -19,10 +20,13 @@ words = []
 
 num_clients = 0
 artist = 0
+drawings = []
 
 class PictNamespace(BaseNamespace, BroadcastMixin):
     last_ping = 0
     last_pong = 0
+
+    
 
     def initialize(self):
         global num_clients
@@ -32,6 +36,7 @@ class PictNamespace(BaseNamespace, BroadcastMixin):
         num_clients += 1
         self.client_id = num_clients
         self.emit('set_client_id', {'client_id': self.client_id})
+        self.emit('initial_drawing', json.dumps(drawings))
         self.log("Sent client id %d" % self.client_id)
 
     def log(self, message):
@@ -51,6 +56,8 @@ class PictNamespace(BaseNamespace, BroadcastMixin):
     def revoke_control(self):
         global artist
         global roundlength
+        global drawings
+        drawings = []
         self.log("Revoke control - sleeping...")
         gevent.sleep(roundlength)
         self.log("Control revoked.")
@@ -60,7 +67,11 @@ class PictNamespace(BaseNamespace, BroadcastMixin):
 
     def on_post_drawing(self, posted):
         global artist
+        global drawings
+        self.log(posted)
         self.log("Drawing posted by %d" % self.client_id)
+        drawings.append(posted['drawing'])
+        self.log(drawings)
         if self.client_id == artist:
             self.broadcast_event_not_me('download_drawing', posted)
 

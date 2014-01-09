@@ -20,6 +20,11 @@ socket.on('set_client_id', function(data) {
     console.log("Given ID " + player.id + " by the server.");
 });
 
+socket.on('initial_drawing', function(data) {
+  console.log("Received full image data.");
+  drawDrawing(JSON.parse(data), canvas);
+});
+
 socket.on('download_drawing', function(data) {
     console.log("Received drawing data.");
     drawFromPoints(data.drawing, canvas);
@@ -30,6 +35,7 @@ socket.on('new_word', function(data) {
 });
 
 socket.on('grant_control', function(data) {
+    canvas.clear()
     if (data.client_id == player.id) {
         tray.innerHTML = "You are broadcasting.";
     }
