@@ -30,6 +30,8 @@ socket.on('new_word', function(data) {
 });
 
 socket.on('grant_control', function(data) {
+    canvas.clear();
+    counter_tick(data.rlen);
     if (data.client_id == player.id) {
         tray.innerHTML = "You are broadcasting.";
     }
