@@ -4,6 +4,8 @@ var socket = io.connect('/game');
 
 tray.innerHTML = "Connected.";
 
+socket.emit('get_new_word', {});
+
 socket.on('disconnect', function () {
     console.log("Disconnected from server.");
     tray.innerHTML("Disconnected.");
@@ -17,4 +19,8 @@ socket.on('set_client_id', function(data) {
 socket.on('download_drawing', function(data) {
     console.log("Received drawing data.");
     // andrew
+});
+
+socket.on('new_word', function(data) {
+    tray.innerHTML = "Received new word: " + data.word;
 });

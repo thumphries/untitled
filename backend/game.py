@@ -1,9 +1,16 @@
 from socketio.namespace import BaseNamespace
 from socketio import socketio_manage
-
 from flask import request, Response
 
 from backend import app
+
+import random
+import string
+
+# Load word file
+# Not the best place to put this
+WORDFILE = "./untitled/backend/resource/words"
+words = []
 
 clients = 0
 artist = 1
@@ -29,7 +36,22 @@ class PictNamespace(BaseNamespace):
         if self.client_id == artist:
             self.broadcast_event_not_me('download_drawing', posted)
 
+    def on_get_new_word(self, posted):
+        new_word = choose_word()
+        self.emit('new_word', {'word': new_word})
+
 @app.route('/socket.io/<path:remaining>')
 def route(remaining):
     socketio_manage(request.environ, {'/game': PictNamespace}, request)
     return Response()
+
+def load_words():
+    global words
+    fh = open(WORDFILE, 'r')
+    slurp = fh.read()
+    words = string.split(slurp)
+
+def choose_word():
+    return random.choice(words)
+
+load_words()
