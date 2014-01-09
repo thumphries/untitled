@@ -10,7 +10,7 @@ import random
 import string
 import time
 
-roundlength = 60
+roundlength = 10
 
 # Load word file
 # Not the best place to put this
@@ -44,11 +44,18 @@ class PictNamespace(BaseNamespace, BroadcastMixin):
         if artist == 0:
             artist = self.client_id
             self.broadcast_event('grant_control', {'client_id': self.client_id})
-//            gevent.sleep(roundlength)
-            artist = 0
-            self.broadcast_event('revoke_control', {'client_id': self.client_id})
+            gevent.spawn(self.revoke_control)
         else:
             self.emit('deny_control', {})
+
+    def revoke_control(self):
+        global artist
+        global roundlength
+        self.log("Revoke control - sleeping...")
+        gevent.sleep(roundlength)
+        self.log("Control revoked.")
+        artist = 0
+        self.broadcast_event('revoke_control', {'client_id': self.client_id})
 
 
     def on_post_drawing(self, posted):

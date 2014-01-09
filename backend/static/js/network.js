@@ -8,7 +8,7 @@ socket.emit('get_new_word', {});
 
 socket.emit('request_control', {});
 window.setInterval(function() {
-    socket.emit('request_control', {});}, 60000);
+    socket.emit('request_control', {});}, 10000);
 
 socket.on('disconnect', function () {
     console.log("Disconnected from server.");
@@ -36,7 +36,9 @@ socket.on('grant_control', function(data) {
 });
 
 socket.on('revoke_control', function(data) {
-    tray.innerHTML = "You are NOT broadcasting.";
+    if (data.client_id == player.id) {
+        tray.innerHTML = "You are NOT broadcasting.";
+    }
 });
 
 socket.on('deny_control', function(data) {

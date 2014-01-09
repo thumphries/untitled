@@ -7,6 +7,8 @@ function Point(x, y) {
 
 function Drawing() {
   this.points = [];
+  this.colour;
+  this.strokeWidth;
 }
 
 Drawing.prototype.addPoint = function(point) {
@@ -28,6 +30,9 @@ function Canvas() {
   this.h = this.canvas.height;
 
   this.p = new Point(0, 0);
+
+  this.colour = "black";
+  this.strokeWidth = 2;
 
   this.isMouseDown = false;
 
@@ -57,27 +62,39 @@ Canvas.prototype.clear = function() {
   this.ctx.clearRect(0, 0, this.w, this.h);
 }
 
+Canvas.prototype.setColour = function(colour) {
+  this.colour = colour;
+}
+
+Canvas.prototype.setStrokeWidth = function(strokeWidth) {
+  this.strokeWidth = strokeWidth;
+}
+
 function draw(p, p0, obj) {
-  var colour = "black";
-  var strokeWidth = 2;
   obj.ctx.beginPath();
   obj.ctx.moveTo(p0.x, p0.y);
   obj.ctx.lineTo(p.x, p.y);
-  obj.ctx.strokeStyle = colour;
-  obj.ctx.lineWidth = strokeWidth;
+  obj.ctx.globalAlpha = 0.8;
+  obj.ctx.strokeStyle = obj.colour;
+  obj.ctx.lineWidth = obj.strokeWidth;
   obj.ctx.stroke();
   obj.ctx.closePath();
 }
 
 function setMouseDown(event, obj) {
   obj.currentDrawing = new Drawing();
-  obj.p = new Point(event.clientX - obj.canvas.offsetLeft, event.clientY - obj.canvas.offsetTop);
+  obj.currentDrawing.colour = obj.colour;
+  obj.currentDrawing.strokeWidth = obj.strokeWidth;
+  var x = event.clientX - obj.canvas.offsetLeft + document.body.scrollLeft + document.documentElement.scrollLeft;
+  var y = event.clientY - obj.canvas.offsetTop + document.body.scrollTop + document.documentElement.scrollTop;
+  obj.p = new Point(x, y);
   obj.currentDrawing.addPoint(obj.p);
   
   obj.isMouseDown = true; 
   obj.ctx.beginPath();
-  obj.ctx.fillStyle = "black";
-  obj.ctx.fillRect(obj.p.x, obj.p.y, 2, 2);
+  obj.ctx.globalAlpha = 0.8;
+  obj.ctx.fillStyle = obj.colour;
+  obj.ctx.fillRect(obj.p.x, obj.p.y, obj.strokeWidth, obj.strokeWidth);
   obj.ctx.closePath();
 }
 
@@ -86,7 +103,6 @@ function setMouseUp(event, obj) {
     obj.isMouseDown = false;
     obj.drawings.push(obj.currentDrawing);
     socket.emit('post_drawing', { drawing: obj.currentDrawing});
-    console.log(JSON.stringify(obj.currentDrawing));
   }
 }
 
@@ -96,15 +112,25 @@ function onMouseOutBounds(event, obj) {
 
 function onMouseMove(event, obj) {
   if (obj.isMouseDown) {
-    obj.p = new Point(event.clientX - obj.canvas.offsetLeft, event.clientY - obj.canvas.offsetTop);
+    var x = event.clientX - obj.canvas.offsetLeft + document.body.scrollLeft + document.documentElement.scrollLeft;
+    var y = event.clientY - obj.canvas.offsetTop + document.body.scrollTop + document.documentElement.scrollTop;
+    obj.p = new Point(x, y);
     var prevPoint = obj.currentDrawing.lastPoint();
     obj.currentDrawing.addPoint(obj.p);
     draw(obj.p, prevPoint, obj);
   } 
 }
 
+function drawDrawing(drawings, obj) {
+  for (i = 0; i < drawings.length; i++) {
+    drawFromPoints(drawings[i], obj);
+  }
+}
+
 function drawFromPoints(drawing, obj) {
-  for (var i = 0; i < drawing.points.length - 2; i++) {
+  for (var i = 0; i < drawing.points.length - 1; i++) {
+    obj.colour = drawing.colour;
+    obj.strokeWidth = drawing.strokeWidth;
     draw(drawing.points[i], drawing.points[i + 1], obj); 
   }
 }

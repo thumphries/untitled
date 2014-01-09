@@ -11,10 +11,17 @@
 
         <!-- Custom styles for this template -->
         <link href="/static/css/homepage-template.css" rel="stylesheet">
+   
+        <style type="text/css">
+          #palette {
+            width: 40px;
+            height: 40px;
+            border: 2px black solid;
+          }
+        </style>
     </head>
 
     <body onload=init()>
-
         <div class="navbar navbar-inverse navbar-fixed-top">
             <div class="container">
                 <div class="navbar-header">
@@ -37,11 +44,51 @@
 
         <div class="container">
 
-          <canvas id=canvas width="1000" height="500" style="border: 2px black solid;"></canvas>
-          <div id=pos></div>
+          <canvas id=canvas width="2000" height="2000" style="border: 2px black solid;"></canvas>
           <p id="debug"></p>
+          <table>
+          <tr>
+            <td>
+              <div id=palette style="background:black;" onclick=canvas.setColour("black")></div>
+            </td>
+            <td>
+              <div id=palette style="background:white;" onclick=canvas.setColour("white")></div>
+            </td>
+            <td>
+              <div id=palette style="background:green;" onclick=canvas.setColour("green")></div>
+            </td>
+            <td>
+              <div id=palette style="background:blue;" onclick=canvas.setColour("blue")></div>
+            </td>
+            <td>
+              <div id=palette style="background:pink;" onclick=canvas.setColour("pink")></div>
+            </td>
+            <td>
+              <div id=palette style="background:purple;" onclick=canvas.setColour("purple")></div>
+            </td>
+            <td>
+              <div id=palette style="background:red;" onclick=canvas.setColour("red")></div>
+            </td>
+            <td>
+              <div id=palette style="background:yellow;" onclick=canvas.setColour("yellow")></div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div><a href="#" onclick=canvas.setStrokeWidth(2)>TINY</a></div>
+            </td>
+            <td>
+              <div><a href="#" onclick=canvas.setStrokeWidth(10)>MEDIUM</a></div>
+            </td>
+            <td>
+              <div><a href="#" onclick=canvas.setStrokeWidth(20)>LARGE</a></div>
+            </td>
+            <td>
+              <div><a href="#" onclick=canvas.setStrokeWidth(50)>HUGE</a></div>
+            </td>
 
-
+          </tr>
+          </table>
         </div><!-- /.container -->
 
 
