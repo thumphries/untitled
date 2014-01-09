@@ -1,7 +1,5 @@
 var canvas;
 
-var drawthis = JSON.parse('{"points":[{"x":140,"y":116},{"x":148,"y":116},{"x":164,"y":116},{"x":220,"y":140},{"x":296,"y":168},{"x":400,"y":192},{"x":484,"y":220},{"x":572,"y":236},{"x":600,"y":252},{"x":624,"y":256},{"x":640,"y":260},{"x":660,"y":268},{"x":684,"y":280},{"x":724,"y":300},{"x":756,"y":320},{"x":788,"y":336},{"x":808,"y":352},{"x":824,"y":360},{"x":832,"y":364},{"x":836,"y":368},{"x":840,"y":376},{"x":840,"y":380}]}');
-
 function Point(x, y) {
   this.x = x;
   this.y = y;
@@ -21,7 +19,7 @@ Drawing.prototype.lastPoint = function(point) {
 
 function init() {
   canvas = new Canvas();
-  drawFromPoints(drawthis, canvas);
+  drawDrawing(drawthis, canvas);
 }
 
 function Canvas() {
@@ -84,7 +82,7 @@ function setMouseUp(event, obj) {
   if (obj.isMouseDown) {
     obj.isMouseDown = false;
     obj.drawings.push(obj.currentDrawing);
-    console.log(JSON.stringify(obj.currentDrawing));
+    console.log(JSON.stringify(obj.drawings));
   }
 }
 
@@ -99,6 +97,12 @@ function onMouseMove(event, obj) {
     obj.currentDrawing.addPoint(obj.p);
     draw(obj.p, prevPoint, obj);
   } 
+}
+
+function drawDrawing(drawings, obj) {
+  for (i = 0; i < drawings.length - 1; i++) {
+    drawFromPoints(drawings[i], obj);
+  }
 }
 
 function drawFromPoints(drawing, obj) {
