@@ -5,7 +5,8 @@ from socketio.server import SocketIOServer
 from werkzeug.serving import run_with_reloader
 
 from backend import app
-from backend.views import *
+import backend.views
+import backend.game
 
 PORT = 5000
 
