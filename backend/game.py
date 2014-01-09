@@ -44,7 +44,7 @@ class PictNamespace(BaseNamespace, BroadcastMixin):
         if artist == 0:
             artist = self.client_id
             self.broadcast_event('grant_control', {'client_id': self.client_id})
-            gevent.sleep(roundlength)
+//            gevent.sleep(roundlength)
             artist = 0
             self.broadcast_event('revoke_control', {'client_id': self.client_id})
         else:
