@@ -25,6 +25,12 @@ body {
     border: 2px solid #DDDDDD;
 }
 
+#nicks {
+  width: 200px;
+  float: right;
+  border: 2px solid black;
+}
+
 #chat-output {
     height: 550px;
     overflow: scroll;

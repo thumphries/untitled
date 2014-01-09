@@ -14,6 +14,12 @@ window.setInterval(function() {
 
 // Signals
 
+socket.on('new_player', function (data) {
+  console.log("New player: " + data);
+  var nicks = document.getElementById('nicks');
+  nicks.innerHTML += data + "<br/>";
+});
+
 socket.on('disconnect', function () {
     console.log("Disconnected from server.");
     tray.innerHTML("Disconnected.");

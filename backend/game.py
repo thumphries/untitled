@@ -88,6 +88,7 @@ class PictNamespace(BaseNamespace, BroadcastMixin):
         self.username = posted['username']
         players[self.client_id] = self.username
         self.log("registered username %s" % self.username)        
+        self.broadcast_event('new_player', self.username)
 
     def on_post_chat(self, posted):
         global players
