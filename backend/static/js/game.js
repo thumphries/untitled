@@ -16,9 +16,9 @@ function join_game () {
     send_name(player.name);
 
     var block = document.getElementById("join");
-    block.style.display=none;
+    block.style.display="none";
 
-    canvas.canvas.style.display=inline;
+    canvas.canvas.style.display="inline";
 
     return false;
 }
