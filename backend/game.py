@@ -21,12 +21,12 @@ words = []
 num_clients = 0
 artist = 0
 drawings = []
+players = []
 
 class PictNamespace(BaseNamespace, BroadcastMixin):
     last_ping = 0
     last_pong = 0
 
-    
 
     def initialize(self):
         global num_clients
@@ -80,6 +80,14 @@ class PictNamespace(BaseNamespace, BroadcastMixin):
         if self.client_id == artist:
             new_word = choose_word()
             self.emit('new_word', {'word': new_word})
+
+    def on_register_user(self, posted):
+        global artist
+        global players
+        self.username = posted['username']
+        players.append((self.client_id, self.username))
+        self.log("registered username %s" % self.username)        
+
 
 @app.route('/socket.io/<path:remaining>')
 def route(remaining):
