@@ -20,6 +20,11 @@ socket.on('set_client_id', function(data) {
     console.log("Given ID " + player.id + " by the server.");
 });
 
+socket.on('initial_drawing', function(data) {
+  console.log("Received full image data.");
+  drawDrawing(JSON.parse(data), canvas);
+});
+
 socket.on('download_drawing', function(data) {
     console.log("Received drawing data.");
     drawFromPoints(data.drawing, canvas);
