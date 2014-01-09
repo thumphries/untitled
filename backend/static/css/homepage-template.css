@@ -27,6 +27,7 @@ body {
 
 #chat-output {
     height: 550px;
+    overflow: scroll;
 }
 
 #chatf {

@@ -58,7 +58,8 @@ socket.on('deny_control', function(data) {
 
 socket.on('chat_msg', function(data) {
     console.log("Received message: " + data);
-    chatbox.innerHTML = chatbox.innerHTML + "\n<" + data.sender + "> " + data.msg;
+    chatbox.innerHTML = chatbox.innerHTML + "<br/>[" + data.sender + "] " + data.msg;
+    chatbox.scrollTop = chatbox.scrollHeight;
 });
 
 // Emissions

@@ -10,6 +10,7 @@ import random
 import string
 import time
 import json
+import bleach
 
 roundlength = 10
 
@@ -90,8 +91,9 @@ class PictNamespace(BaseNamespace, BroadcastMixin):
 
     def on_post_chat(self, posted):
         global players
+        cleaned = bleach.clean(posted['msg'])
         self.log("message: %s" % posted)
-        self.broadcast_event('chat_msg', posted)
+        self.broadcast_event('chat_msg', {'sender': posted['sender'], 'msg': cleaned})
 
 
 @app.route('/socket.io/<path:remaining>')

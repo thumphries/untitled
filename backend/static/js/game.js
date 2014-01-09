@@ -42,5 +42,8 @@ function counter_tick(seconds) {
 
 function post_chat () {
     var guess = chatf.value;
-    send_chat(guess);
+    if (guess) {
+        send_chat(guess);
+        chatf.value = "";
+    }
 }
