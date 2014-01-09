@@ -18,7 +18,7 @@ socket.on('set_client_id', function(data) {
 
 socket.on('download_drawing', function(data) {
     console.log("Received drawing data.");
-    // andrew
+    drawFromPoints(data.drawing, canvas);
 });
 
 socket.on('new_word', function(data) {

@@ -1,4 +1,5 @@
 from socketio.namespace import BaseNamespace
+from socketio.mixins import BroadcastMixin
 from socketio import socketio_manage
 from flask import request, Response
 
@@ -15,7 +16,7 @@ words = []
 clients = 0
 artist = 1
 
-class PictNamespace(BaseNamespace):
+class PictNamespace(BaseNamespace, BroadcastMixin):
     def initialize(self):
         global clients
         self.logger = app.logger
@@ -30,6 +31,7 @@ class PictNamespace(BaseNamespace):
 
     def on_post_drawing(self, posted):
         global artist
+        self.log("Drawing posted by %d" % self.client_id)
         if self.client_id == artist:
             self.broadcast_event_not_me('download_drawing', posted)
 

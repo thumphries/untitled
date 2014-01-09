@@ -21,7 +21,7 @@ Drawing.prototype.lastPoint = function(point) {
 
 function init() {
   canvas = new Canvas();
-  drawFromPoints(drawthis, canvas);
+  //drawFromPoints(drawthis, canvas);
 }
 
 function Canvas() {
@@ -84,6 +84,7 @@ function setMouseUp(event, obj) {
   if (obj.isMouseDown) {
     obj.isMouseDown = false;
     obj.drawings.push(obj.currentDrawing);
+    socket.emit('post_drawing', { drawing: obj.currentDrawing});
     console.log(JSON.stringify(obj.currentDrawing));
   }
 }
